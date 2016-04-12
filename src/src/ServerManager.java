@@ -117,11 +117,12 @@ public class ServerManager{
 		
 		Session exceptionSession = null;
 		
+		
 		//not first time user
 		if(cookie != null)
 		{
 			//fake return Session
-			Session resSession;
+			Session resSession = null;
 			
 			String[] cookieValue = cookie.getValue().split("_");
 			String amiInd;
@@ -160,7 +161,10 @@ public class ServerManager{
 				
 			//different operations by different user inputs
 			String op = request.getParameter("op");
-			
+			if(op == null)
+			{
+				op = "Refresh";
+			}
 			
 			if(op != null)
 			{
@@ -255,8 +259,11 @@ public class ServerManager{
 						resSession.rpcDataBricks.add(loc);
 					}
 					
+					
 				}
 			}
+			
+			return resSession;
 		}
 		//TODO
 		//first time user
@@ -285,8 +292,8 @@ public class ServerManager{
 			return resSession;
 		}
 		
-		System.out.println("ServerManager: get or update why fall here? not in wq list, not read or write request...");
-		return exceptionSession;
+		//System.out.println("ServerManager: get or update why fall here? not in wq list, not read or write request...");
+		//return exceptionSession;
 	}
 	
 	
