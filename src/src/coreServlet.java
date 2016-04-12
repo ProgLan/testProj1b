@@ -65,11 +65,9 @@ public class coreServlet extends HttpServlet{
 		String executingServerID = "Executing ServerID: " + sm.amiIndex;
 		String rebootNum = "RebootNum: " + sm.rebootNum;
 		String dataFoundServerID = "Data Found ServerID: ";
-		String cookieMetaData = "Cookie Meta Data: ";
+		String cookieMetaData = "Cookie Meta Data: " + sm.locMetaData(c);
 		String cookieDomain = "Cookie Domain: "; 
 
-		
-		
 		//generate html file
 		String title = "CS5300_Proj1b_lz376";
 	    String docType =
