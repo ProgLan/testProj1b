@@ -1,0 +1,11 @@
+oldlaunch=(jq '.Item[0].Attrubutes[2].Value' < existingIP.json)
+newlaunch=$(echo oldlauncn + 1 | bc)
+
+aws configure set aws_access_key_id XXXXX
+aws configure set aws_secret_access_key XXXXX
+aws configure set default.region us-east-1
+yum -y aws configure set preview.sdb true
+
+aws sdb put-attributes --domain-name IPaddrDM --item-name $(cat local-ipv4) --attributes Name="IP",Value=$(cat local-lpv4),Replace=true Name="ami-launch-index",Value=$(cat ami-launch-index),Replace=true Name="Launch-number",Value=newlaunch,Replace=true
+
+service tomcat8 start 

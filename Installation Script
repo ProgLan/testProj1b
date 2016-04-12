@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#1.Install Tomcat Server, application code, other software
+#2.determine IP address of the instance
+#3.determine the instance's ami-launch-index as serverID
+#4.upload to SimpleDB as domain + item + attribute from ami-launch-index
+#5.downlaod the internal IP address from SimpleDB and store in file system
+#6.start Tomcat server
+
+
+yum update -y
+yum -y install tomcat8-webapps tomcat8-docs-webapp tomcat8-admin-webapps jq
+
+cd /home
+
+wget http://169.254.169.254/latest/meta-data/local-ipv4
+wget http://169.254.169.254/latest/meta-data/ami-launch-index
+
+aws configure set aws_access_key_id XXXXXX
+aws configure set aws_secret_access_key XXXXXX
+aws configure set default.region us-east-1
+aws configure set preview.sdb true
+
+aws sdb create-domain --domain-name IPaddrDM
+
+aws sdb put-attributes --domain-name IPaddrDM --item-name $(cat local-ipv4) --attributes Name="IP",Value=$(cat local-ipv4),Replace=true Name="ami-launch-index",Value=$(cat ami-launch-index),Replace=true Name="Launch-number",Value=0,Replace=true
+
+aws sdb select --select-expression 'select * from IPaddrDM' > existingIps.json
+
+webapps_dir=/var/lib/tomcat8/webapps
+
+rm -rf $webapps_dir/ROOT
+
+cd /var/lib/tomcat8/webapps
+wget http://edu-cornell-cs-cs5300s16-lz376.s3.amazonaws.com/CS5300_proj1b.war
+
+service tomcat8 start
+

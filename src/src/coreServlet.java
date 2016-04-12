@@ -2,8 +2,10 @@ package src;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +45,16 @@ public class coreServlet extends HttpServlet{
 		//if op is not log out, get a new session or update current session based on the cookie
 		ServerManager sm = new ServerManager();
 		Session session = sm.getOrUpdate(request);
+		//test session
+//		SessionID sid = new SessionID("0", 0, 1);
+//		Session session = new Session(sid, 1, "hello user", new Date());
 		
 		//set cookie and expire time, response with new cookie
 		Cookie c = sm.setCookie(response, session);
 		
 		//preprocess html info
 		String userID = "NetID: lz376";
-		String displayMsg = "displayMsg" + session.msg;
+		String displayMsg = session.msg;
 		String sessionID = "SessionID:" + session.sessionID.toString();
 		String version = "VersionNum:"+ session.version[0];
 		String creationDate = "Date:" + session.createDate;
@@ -59,7 +64,7 @@ public class coreServlet extends HttpServlet{
 		String executingServerID = "Executing ServerID: " + sm.amiIndex;
 		String rebootNum = "RebootNum: " + sm.rebootNum;
 		String dataFoundServerID = "Data Found ServerID: ";
-		String cookieMetaData = "Cookie Meta Data: " + sm.locMetaData(c);
+		String cookieMetaData = "Cookie Meta Data: ";
 		String cookieDomain = "Cookie Domain: "; 
 
 		

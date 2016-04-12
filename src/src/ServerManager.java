@@ -69,12 +69,20 @@ public class ServerManager extends HttpServlet{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("server manager: localAmiIPtable size " + this.amiIpTable.size());
 		
 		//get this server's amiIndex from SimpleDB and store in the amiIndex variable
 		this.amiIndex = this.getLoclAmi();
 		
 		//get reboot num from file system
-		this.rebootNum = getRebootNumFromFile();
+		try {
+			//TODO
+			this.rebootNum = getRebootNumFromSDB();
+			//this.rebootNum = 0;
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		this.sessionTable = new HashMap<String, Session>();
 		try {
@@ -282,7 +290,7 @@ public class ServerManager extends HttpServlet{
 		return sID;
 	}
 	
-	public Date initDiscardTime(){
+	public static Date initDiscardTime(){
 		Date now = new Date();
 		long longNow = now.getTime();
 		Date discardTime = new Date(longNow + DELTA + SESSION_TIMEOUT_SECS);
@@ -368,29 +376,23 @@ public class ServerManager extends HttpServlet{
 		return ip;
 	}
 	
-	public static int getRebootNumFromFile(){
-		File file = new File("/Users/proglan/Desktop/testfile.txt");
+	public int getRebootNumFromSDB() throws Exception{
 		int res = 0;
+		ArrayList<InstanceValues> list = SimpleDB.SimpleDBdownload();
 		
-		try (FileInputStream fis = new FileInputStream(file)) {
-
-			//System.out.println("Total file size to read (in bytes) : "+ fis.available());
-
-			int content;
-			while ((content = fis.read()) != -1) {
-				// convert to char and display it
-				res = res * 10 + ((char) content - '0');
+		for(InstanceValues item: list)
+		{
+			if(item.getIP().equals(this.localIPString))
+			{
+				res = Integer.parseInt(item.getLaunchNumber());
 			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 		return res;
 	}
 	
 	public static String getIPFromFile() {
-		File file = new File("/Users/proglan/Desktop/testfile.txt");
+		File file = new File("Home/local-ipv4");
 		String res = "";
 		int item = 0;
 		int dotCount = 0;
