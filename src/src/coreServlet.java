@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class coreServlet extends HttpServlet{
+	ServerManager sm = new ServerManager();
+	
 	@Override
 	public void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		//generate html
@@ -34,16 +36,14 @@ public class coreServlet extends HttpServlet{
 				out.println("<!DOCTYPE html>");
 		        out.println("<html><head></head><body>");
 		        out.println("<h3>Session terminate!</h3>");
-		        out.println("<Form action = '/CS5300_proj1a/index' method = 'get'>");
-		        out.println("<Input type = 'submit' value = 'Back'></Input>");
-		        out.println("</Form>");
+		        //TODO: "/testProj1b/index" change testProj1b
+		        out.println("<a href = '/testProj1b/index'>Back</a>");
 		        out.println("</body></html>");
 		        return;
 			}
 		}
 		
 		//if op is not log out, get a new session or update current session based on the cookie
-		ServerManager sm = new ServerManager();
 		Session session = sm.getOrUpdate(request);
 		//test session
 //		SessionID sid = new SessionID("0", 0, 1);
@@ -88,13 +88,13 @@ public class coreServlet extends HttpServlet{
 	                  "<p><Input type = 'submit' value = 'Refresh' name = 'op'></Input>\n</p>" +
 	                  "<p><Input type = 'submit' value = 'Logout' name = 'op'></Input>\n</p>" +
 	                  "</Form>"+
-					  "<span>" + cookie + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + expireTime + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + executingServerID + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + rebootNum + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + dataFoundServerID + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + cookieMetaData + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
-					  "<span>" + cookieDomain + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>\n" +
+					  "<p>" + cookie + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + expireTime + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + executingServerID + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + rebootNum + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + dataFoundServerID + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + cookieMetaData + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
+					  "<p>" + cookieDomain + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>\n" +
 	                  "</BODY></HTML>");
 	
 	}

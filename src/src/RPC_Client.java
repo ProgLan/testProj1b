@@ -130,6 +130,9 @@ public class RPC_Client{
 		
 		//use ipAdd to determine destIpAdds
 		ArrayList<InetAddress> destIpAdds = initRandomWBricks();
+		//construct a new swt and set info
+		swt = new RPC_SessionWriteTuple();
+		
 		
 		for(InetAddress destIpAddress: destIpAdds)
 		{
@@ -165,12 +168,11 @@ public class RPC_Client{
 					String amiInd = recvTuple.amiInd;
 					System.out.println("rpcclient: write return callID: " + returnCallId);
 					
+					
 					if(recvTuple.msg.equals("ws"))
 					{
 						writeSucNum++;
 						
-						//construct a new swt and set info
-						swt = new RPC_SessionWriteTuple();
 						swt.msg = "AtleastOneSuccess";
 						swt.returnCallID = returnCallId;
 						if(swt.dataBrickLocation == null)

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-public class ServerManager extends HttpServlet{
+public class ServerManager{
 	private static final String cookieName = "CS5300PROJ1SESSION";
 	private static final int cookieLength = 6;
 	
@@ -47,6 +47,8 @@ public class ServerManager extends HttpServlet{
 	
 	public static final int SESSION_TIMEOUT_SECS = 30000;
 	public static final int DELTA = 1000;
+	
+	
 	
 	public ServerManager(){
 		//if test on local, set local Ip address
@@ -121,7 +123,7 @@ public class ServerManager extends HttpServlet{
 			//fake return Session
 			Session resSession;
 			
-			String[] cookieValue = cookie.toString().split("_");
+			String[] cookieValue = cookie.getValue().split("_");
 			String amiInd;
 			int rebootNum;
 			int sessionNum;
@@ -133,10 +135,10 @@ public class ServerManager extends HttpServlet{
 			{
 				amiInd = "amiIndNotfound";
 				rebootNum = 0;
-				sessionNum = 0;
+				sessionNum = 1;
 				versionNum = 0;
-				wq0amiInd = "wq0amiIndNotfound";
-				wq1amiInd = "wq1amiIndNotfound";
+				wq0amiInd = "0";
+				wq1amiInd = "0";
 				System.out.println("server Manager: cookie format not correct!");
 			}
 			else
@@ -263,11 +265,18 @@ public class ServerManager extends HttpServlet{
 			SessionID sid = initSessionID();
 			Date discardDate = initDiscardTime();
 			
-			Session resSession = new Session(sid, 0, "Hello User!", discardDate, this.amiIndex);
+			Session resSession = new Session(sid, 0, "Hello User!", discardDate);
 			
 			//first time user only send write request
 			try {
-				this.rpc_client.sessionWriteClient(sid, 0, "Hello User!", discardDate);
+				RPC_SessionWriteTuple swt = this.rpc_client.sessionWriteClient(sid, 0, "Hello User!", discardDate);
+				ArrayList<String> locMetaData = swt.dataBrickLocation;
+				for(String loc: locMetaData)
+				{
+					resSession.rpcDataBricks.add(loc);
+				}
+				
+				
 			} catch (ClassNotFoundException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -306,9 +315,9 @@ public class ServerManager extends HttpServlet{
 	public Cookie setCookie(HttpServletResponse response,Session session) throws ServletException {
 		Cookie cookie = new Cookie(cookieName, cookieMaker(session));
 		//manually set cookie expire
-		cookie.setMaxAge(-1);
+		//cookie.setMaxAge(-1);
 		//TODO: cookie set Domain， get root domain first
-		cookie.setDomain("");
+		//cookie.setDomain("*");
 		response.addCookie(cookie);
 		
 		return cookie;
@@ -325,7 +334,7 @@ public class ServerManager extends HttpServlet{
 		StringBuilder res = new StringBuilder("");
 		res.append(session.sessionID.toString());
 		//TODO
-		res.append("_" + session.version);
+		res.append("_" + session.version[0]);
 		for(String loc: session.rpcDataBricks)
 		{
 			res.append("_" + loc);

@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 public class RPC_Server extends Thread{
 	public static final int portProj1bRPC = 5300;
+	//public static final int portProj1bRPC = 5300;
 	public static final int maxPacketSize = 1000;
 	//key: sessionID_versionNum, value: Session object
 	public HashMap<String, Session> sessionTable;
@@ -48,6 +49,8 @@ public class RPC_Server extends Thread{
 		    try{
 		    	byte[] inBuf = new byte[maxPacketSize];
 			    DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
+			    System.out.println("recvPck is null: " + (recvPkt == null));
+			    System.out.println("rpcSocket is null: " + (rpcSocket == null));
 			    rpcSocket.receive(recvPkt);
 			    System.out.println("package received");
 			    

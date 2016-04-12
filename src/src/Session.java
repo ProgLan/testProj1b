@@ -16,7 +16,7 @@ public class Session implements Serializable{
 	//discardTime
 	public Date discardTime;
 	//TODO: info about meta server location(ami-launch-index), WQ distinct bricks
-	public HashSet<String> rpcDataBricks = new HashSet<String>();	
+	public ArrayList<String> rpcDataBricks = new ArrayList<String>();	
 	//public int recentTouchedVersion;
 	
 	public static final int SESSION_TIMEOUT_SECS = 30000;
@@ -43,10 +43,7 @@ public class Session implements Serializable{
 		this.msg = msg;
 		this.discardTime = discardTime;
 		
-		if(!this.rpcDataBricks.contains(locData))
-		{
-			this.rpcDataBricks.add(locData);
-		}
+		this.rpcDataBricks.add(locData);
 		
 		this.createDate = new Date();
 	}
@@ -58,7 +55,7 @@ public class Session implements Serializable{
 		this.msg = msg;
 		this.discardTime = discardTime;
 		
-		this.rpcDataBricks = new HashSet<String>();
+		this.rpcDataBricks = new ArrayList<String>();
 	}
 	
 	
@@ -73,7 +70,7 @@ public class Session implements Serializable{
 	public String toString() {
 		String res = "";
 		res += this.sessionID.toString();
-		res +=  "_" + this.version + "";
+		res +=  "_" + this.version[0] + "";
 		
 		return res;
 	}
