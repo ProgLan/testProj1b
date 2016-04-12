@@ -33,11 +33,12 @@ public class coreServlet extends HttpServlet{
 				//get a current session, destroy that session and redirect to a log out page
 				//Session session = SessionManager.getSession(request);
 				//SessionManager.destroySession(session);
+				Cookie c = sm.setCookie(response, null);
 				out.println("<!DOCTYPE html>");
 		        out.println("<html><head></head><body>");
 		        out.println("<h3>Session terminate!</h3>");
 		        //TODO: "/testProj1b/index" change testProj1b
-		        out.println("<a href = '/testProj1b/index'>Back</a>");
+		        //out.println("<a href = '/testProj1b/index'>Back</a>");
 		        out.println("</body></html>");
 		        return;
 			}

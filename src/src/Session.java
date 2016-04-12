@@ -56,6 +56,7 @@ public class Session implements Serializable{
 		this.discardTime = discardTime;
 		
 		this.rpcDataBricks = new ArrayList<String>();
+		this.createDate = new Date();
 	}
 	
 	

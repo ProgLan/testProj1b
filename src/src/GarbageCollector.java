@@ -35,6 +35,7 @@ public class GarbageCollector extends Thread{
 				System.out.println("current live sessionID: " + s.toString());
 			}
 			
+			System.out.println("End one GC round!");
 			try{
 				Thread.sleep(GABAGE_COLLECTION_INTERVAL);
 			}catch(InterruptedException e){

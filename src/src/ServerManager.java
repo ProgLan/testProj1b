@@ -119,7 +119,7 @@ public class ServerManager{
 		
 		
 		//not first time user
-		if(cookie != null)
+		if(cookie != null && cookie.getValue().length() > 0)
 		{
 			//fake return Session
 			Session resSession = null;
@@ -134,13 +134,27 @@ public class ServerManager{
 			
 			if(cookieValue.length != cookieLength)
 			{
-				amiInd = "amiIndNotfound";
-				rebootNum = 0;
-				sessionNum = 1;
-				versionNum = 0;
-				wq0amiInd = "0";
-				wq1amiInd = "0";
-				System.out.println("server Manager: cookie format not correct!");
+				SessionID sid = initSessionID();
+				Date discardDate = initDiscardTime();
+				
+				resSession = new Session(sid, 0, "Hello User!", discardDate);
+				
+				//first time user only send write request
+				try {
+					RPC_SessionWriteTuple swt = this.rpc_client.sessionWriteClient(sid, 0, "Hello User!", discardDate);
+					ArrayList<String> locMetaData = swt.dataBrickLocation;
+					for(String loc: locMetaData)
+					{
+						resSession.rpcDataBricks.add(loc);
+					}
+					
+					
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				return resSession;
 			}
 			else
 			{
@@ -223,6 +237,33 @@ public class ServerManager{
 								}
 							}
 						}
+						
+						//session expire
+						if(prevMsg.equals(""))
+						{
+							SessionID sid = initSessionID();
+							Date discardDate = initDiscardTime();
+							
+							resSession = new Session(sid, 0, "Hello User!", discardDate);
+							resSession.createDate = new Date();
+							
+							//first time user only send write request
+							try {
+								RPC_SessionWriteTuple swt = this.rpc_client.sessionWriteClient(sid, 0, "Hello User!", discardDate);
+								ArrayList<String> locMetaData = swt.dataBrickLocation;
+								for(String loc: locMetaData)
+								{
+									resSession.rpcDataBricks.add(loc);
+								}
+								
+								
+							} catch (ClassNotFoundException | IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							return resSession;
+						}
 					}
 					else
 					{
@@ -273,6 +314,7 @@ public class ServerManager{
 			Date discardDate = initDiscardTime();
 			
 			Session resSession = new Session(sid, 0, "Hello User!", discardDate);
+			resSession.createDate = new Date();
 			
 			//first time user only send write request
 			try {
@@ -320,6 +362,7 @@ public class ServerManager{
 	 * Related 
 	 * Function**/
 	public Cookie setCookie(HttpServletResponse response,Session session) throws ServletException {
+		
 		Cookie cookie = new Cookie(cookieName, cookieMaker(session));
 		//manually set cookie expire
 		//cookie.setMaxAge(-1);
@@ -338,6 +381,11 @@ public class ServerManager{
 	//store in other ami-index server: 0
 	//store in other ami-index server: 3
 	public String cookieMaker(Session session) {
+		if(session == null)
+		{
+			return "1";
+		}
+		
 		StringBuilder res = new StringBuilder("");
 		res.append(session.sessionID.toString());
 		//TODO
