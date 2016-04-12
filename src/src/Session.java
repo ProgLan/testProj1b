@@ -17,7 +17,8 @@ public class Session implements Serializable{
 	public Date discardTime;
 	//TODO: info about meta server location(ami-launch-index), WQ distinct bricks
 	public ArrayList<String> rpcDataBricks = new ArrayList<String>();	
-	//public int recentTouchedVersion;
+	//session found server ID
+	public String foundServerAmiInd = "";
 	
 	public static final int SESSION_TIMEOUT_SECS = 30000;
 	public static final int DELTA = 1000;

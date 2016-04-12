@@ -49,8 +49,8 @@ public class RPC_Server extends Thread{
 		    try{
 		    	byte[] inBuf = new byte[maxPacketSize];
 			    DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
-			    System.out.println("recvPck is null: " + (recvPkt == null));
-			    System.out.println("rpcSocket is null: " + (rpcSocket == null));
+			    //System.out.println("recvPck is null: " + (recvPkt == null));
+			    //System.out.println("rpcSocket is null: " + (rpcSocket == null));
 			    rpcSocket.receive(recvPkt);
 			    System.out.println("package received");
 			    
@@ -100,14 +100,14 @@ public class RPC_Server extends Thread{
 			
 			if(sessionID.equals(("" + keyVals[0]), Integer.parseInt(keyVals[1]), Integer.parseInt(keyVals[2])) && versionNum == version)
 			{
-				srt.setInfo(true, sessionTable.get(key), returnCallId);
+				srt.setInfo(true, sessionTable.get(key), returnCallId, this.amiInd);
 				outByte = toByteArray(srt);
 				System.out.println("read success");
 				return outByte;
 			}
 		}
 		
-		srt.setInfo(false, null, returnCallId);
+		srt.setInfo(false, null, returnCallId, this.amiInd);
 		outByte = toByteArray(srt);
 		System.out.println("read fail");
 		return outByte;

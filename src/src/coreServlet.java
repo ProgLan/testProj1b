@@ -64,7 +64,7 @@ public class coreServlet extends HttpServlet{
 		//new feature
 		String executingServerID = "Executing ServerID: " + sm.amiIndex;
 		String rebootNum = "RebootNum: " + sm.rebootNum;
-		String dataFoundServerID = "Data Found ServerID: ";
+		String dataFoundServerID = "Data Found ServerID: " + session.foundServerAmiInd;
 		String cookieMetaData = "Cookie Meta Data: " + sm.locMetaData(c);
 		String cookieDomain = "Cookie Domain: "; 
 

@@ -208,6 +208,7 @@ public class ServerManager{
 				else if(op.equals("Refresh"))
 				{
 					String prevMsg = "";
+					String foundServerAmi = "";
 					
 					if(isInWq)
 					{
@@ -218,6 +219,7 @@ public class ServerManager{
 							if(keyVals[0].equals(amiInd) && Integer.parseInt(keyVals[1]) == rebootNum && Integer.parseInt(keyVals[2]) == sessionNum && Integer.parseInt(keyVals[3]) == versionNum){
 								String getKey = amiInd + "_" + rebootNum + "_" + sessionNum + "_" + versionNum;
 								prevMsg = this.sessionTable.get(getKey).msg;
+								foundServerAmi = this.amiIndex;
 							}
 							else
 							{
@@ -230,7 +232,9 @@ public class ServerManager{
 									e.printStackTrace();
 								}
 								try {
-									prevMsg = this.rpc_client.sessionReadClient(sessionID, versionNum, destIpAdds).data.msg;
+									Session temp = this.rpc_client.sessionReadClient(sessionID, versionNum, destIpAdds).data;
+									prevMsg = temp.msg;
+									foundServerAmi = temp.foundServerAmiInd;
 								} catch (ClassNotFoundException | IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -262,6 +266,7 @@ public class ServerManager{
 								e.printStackTrace();
 							}
 							
+							resSession.foundServerAmiInd = foundServerAmi;
 							return resSession;
 						}
 					}
@@ -276,7 +281,9 @@ public class ServerManager{
 							e.printStackTrace();
 						}
 						try {
-							prevMsg = this.rpc_client.sessionReadClient(sessionID, versionNum, destIpAdds).data.msg;
+							Session temp = this.rpc_client.sessionReadClient(sessionID, versionNum, destIpAdds).data;
+							prevMsg = temp.msg;
+							foundServerAmi = temp.foundServerAmiInd;
 						} catch (ClassNotFoundException | IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -300,7 +307,7 @@ public class ServerManager{
 						resSession.rpcDataBricks.add(loc);
 					}
 					
-					
+					resSession.foundServerAmiInd = foundServerAmi;
 				}
 			}
 			
@@ -365,9 +372,9 @@ public class ServerManager{
 		
 		Cookie cookie = new Cookie(cookieName, cookieMaker(session));
 		//manually set cookie expire
-		//cookie.setMaxAge(-1);
+		cookie.setMaxAge(SESSION_TIMEOUT_SECS / 1000);
 		//TODO: cookie set Domain， get root domain first
-		//cookie.setDomain("*");
+		//cookie.setDomain("server0.lz376.bigdata.systems");
 		response.addCookie(cookie);
 		
 		return cookie;

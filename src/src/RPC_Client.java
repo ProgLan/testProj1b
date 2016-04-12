@@ -90,7 +90,7 @@ public class RPC_Client{
 						flagVal = true;
 						//construct a new srt and setInfo
 						srt = new RPC_SessionReadTuple();
-						srt.setInfo(flag, recvTuple.data, returnCallId);
+						srt.setInfo(flag, recvTuple.data, returnCallId, recvTuple.amiInd);
 						
 						System.out.println("rpcclient: flagVal becomes true");
 					}
