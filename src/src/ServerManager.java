@@ -356,7 +356,6 @@ public class ServerManager{
 		//return exceptionSession;
 	}
 	
-	
 	//init a new session with a global unique ID
 	public SessionID initSessionID() {
 		//generate a global unique ID
@@ -461,28 +460,28 @@ public class ServerManager{
 		return ip;
 	}
 	
-	public int getRebootNumFromSDB() throws Exception{
-		int res = 0;
-		ArrayList<InstanceValues> list = SimpleDB.SimpleDBdownload();
-		
-		for(InstanceValues item: list)
-		{
-			if(item.getIP().equals(this.localIPString))
-			{
-				res = Integer.parseInt(item.getLaunchNumber());
-			}
-		}
-		
-		return res;
-	}
+//	public int getRebootNumFromSDB() throws Exception{
+//		int res = 0;
+//		ArrayList<InstanceValues> list = SimpleDB.SimpleDBdownload();
+//		
+//		for(InstanceValues item: list)
+//		{
+//			if(item.getIP().equals(this.localIPString))
+//			{
+//				res = Integer.parseInt(item.getLaunchNumber());
+//			}
+//		}
+//		
+//		return res;
+//	}
 	
 	public static HashMap<String, String> getAmiIpFromFile(){
 		HashMap<String, String> res = new HashMap<String, String>();
 		ArrayList<String> list1 = new ArrayList<>();
 		ArrayList<String> list2 = new ArrayList<>();
 		
-		String file1 = "/Users/proglan/Desktop/test1";
-		String file2 = "/Users/proglan/Desktop/test2";
+		String file1 = "/Home/ipTable";
+		String file2 = "/Home/amiTable";
 		BufferedReader br1 = null;
 	
 
@@ -548,7 +547,7 @@ public class ServerManager{
 	}
 	
 	public static int getRebootNumFromFile(){
-		File file = new File("Home/local-rebootNum");
+		File file = new File("/Home/local-rebootNum");
 		int res = 0;
 		
 		try (FileInputStream fis = new FileInputStream(file)) {
@@ -568,7 +567,7 @@ public class ServerManager{
 	}
 	
 	public static String getIPFromFile() {
-		File file = new File("Home/local-ipv4");
+		File file = new File("/Home/local-ipv4");
 		String res = "";
 		int item = 0;
 		int dotCount = 0;
@@ -603,7 +602,6 @@ public class ServerManager{
 		return res;
 	}
 	
-	
 	public static String getLoclAmiFromFile() {
 		File file = new File("/Home/ami-launch-index");
 		int res = 0;
@@ -624,21 +622,18 @@ public class ServerManager{
 		return "" + res;
 	}
 	
+//	public static HashMap<String, String> getAMIIPTableFromSDB() throws Exception{
+//		ArrayList<InstanceValues> list = SimpleDB.SimpleDBdownload();
+//		HashMap<String, String> res = new HashMap<String, String>();
+//		
+//		for(InstanceValues item: list)
+//		{
+//			res.put(item.getIP(), item.getAMIindex());
+//		}
+//		
+//		return res;
+//	}
 	
- 	
-	public static HashMap<String, String> getAMIIPTableFromSDB() throws Exception{
-		ArrayList<InstanceValues> list = SimpleDB.SimpleDBdownload();
-		HashMap<String, String> res = new HashMap<String, String>();
-		
-		for(InstanceValues item: list)
-		{
-			res.put(item.getIP(), item.getAMIindex());
-		}
-		
-		return res;
-	}
-	
- 	
 	public ArrayList<InetAddress> getSystemIPAdds() throws UnknownHostException{
 		ArrayList<InetAddress> res = new ArrayList<InetAddress>();
 		
