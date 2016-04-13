@@ -89,7 +89,7 @@ public class ServerManager{
 		//get reboot num from file system
 		try {
 			//TODO
-			this.rebootNum = getRebootNumFromSDB();
+			this.rebootNum = getRebootNumFromFile();
 			//this.rebootNum = 0;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -479,8 +479,8 @@ public class ServerManager{
 	public static HashMap<String, String> getAmiIpFromFile(){
 		HashMap<String, String> res = new HashMap<String, String>();
 		
-		//String csvFile = "Home/exsitingValues.csv";
-		String csvFile = "/Users/proglan/Desktop/test.csv";
+		String csvFile = "Home/exsitingValues.csv";
+		//String csvFile = "/Users/proglan/Desktop/test.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
