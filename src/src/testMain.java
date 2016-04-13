@@ -19,11 +19,11 @@ public class testMain {
 //		destIP.add(ip);
 //		System.out.println("local IP:" + localIP);
 		
-		HashMap<String, String> res = ServerManager.getAmiIpFromFile();
-		for(String key: res.keySet())
-		{
-			System.out.println("key: " + key + "value: " + res.get(key));
-		}
+//		HashMap<String, String> res = ServerManager.getAmiIpFromFile();
+//		for(String key: res.keySet())
+//		{
+//			System.out.println("key: " + key + "value: " + res.get(key));
+//		}
 		
 		
 		

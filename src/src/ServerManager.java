@@ -481,7 +481,6 @@ public class ServerManager{
 		ArrayList<String> list1 = new ArrayList<>();
 		ArrayList<String> list2 = new ArrayList<>();
 		
-		//String csvFile = "Home/exsitingValues.csv";
 		String file1 = "/Users/proglan/Desktop/test1";
 		String file2 = "/Users/proglan/Desktop/test2";
 		BufferedReader br1 = null;
