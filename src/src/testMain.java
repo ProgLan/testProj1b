@@ -31,9 +31,9 @@ public class testMain {
 //		SimpleDB.SimpleDBdelete("100.32.33.44");
 //		SimpleDB.SimpleDBdelete("101.22.33.44");
 //		SimpleDB.SimpleDBdelete("10.2.3.4");
-//		ArrayList<InstanceValues> res = SimpleDB.SimpleDBdownload();
+		ArrayList<InstanceValues> res = SimpleDB.SimpleDBdownload();
 		
-//		System.out.println("sdb size: " + res.size());
+		System.out.println("sdb size: " + res.size());
 //		
 //		for(InstanceValues iv: res)
 //		{

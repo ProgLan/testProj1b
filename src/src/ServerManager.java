@@ -410,6 +410,9 @@ public class ServerManager{
 		
 		String cookieVal = c.getValue();
 		String[] cookieVals = cookieVal.split("_");
+		System.out.println("cookieVal's length:" + cookieVals.length);
+		
+		
 		
 		res += cookieVals[4];
 		res += " and ";

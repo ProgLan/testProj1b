@@ -9,6 +9,7 @@ import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.net.InetAddress;
@@ -133,7 +134,10 @@ public class RPC_Client{
 		//construct a new swt and set info
 		swt = new RPC_SessionWriteTuple();
 		
+		HashSet<String> visited = new HashSet<String>(); 
 		
+
+	
 		for(InetAddress destIpAddress: destIpAdds)
 		{
 			
@@ -171,21 +175,26 @@ public class RPC_Client{
 					
 					if(recvTuple.msg.equals("ws"))
 					{
-						writeSucNum++;
-						
-						swt.msg = "AtleastOneSuccess";
-						swt.returnCallID = returnCallId;
-						if(swt.dataBrickLocation == null)
+						if(!visited.contains(amiInd))
 						{
-							swt.dataBrickLocation = new ArrayList<String>();
-							swt.dataBrickLocation.add(amiInd);
-						}
-						else
-						{
-							swt.dataBrickLocation.add(amiInd);
+							writeSucNum++;
+							
+							swt.msg = "AtleastOneSuccess";
+							swt.returnCallID = returnCallId;
+							if(swt.dataBrickLocation == null)
+							{
+								swt.dataBrickLocation = new ArrayList<String>();
+								swt.dataBrickLocation.add(amiInd);
+							}
+							else
+							{
+								swt.dataBrickLocation.add(amiInd);
+							}
+							
+							visited.add(amiInd);
+							System.out.println("rpc client write requests " + writeSucNum + " time success");
 						}
 						
-						System.out.println("rpc client write requests " + writeSucNum + " time success");
 					}
 				}while(returnCallId != callID);
 			}catch(SocketTimeoutException stoe){
@@ -203,6 +212,7 @@ public class RPC_Client{
 			}
 		}
 		
+		
 		rpcSocket.close();
 		
 		return swt;
@@ -211,11 +221,17 @@ public class RPC_Client{
 	//return a W databrick ip address list 
 	public ArrayList<InetAddress> initRandomWBricks(){
 		ArrayList<InetAddress> resList = new ArrayList<InetAddress>();
+		HashSet<InetAddress> visited = new HashSet<InetAddress>();
 		
 		for(int i = 0; i < W; i++)
 		{
 			int randomPick = (int) (Math.random() * (this.ipAdds.size()));		
-			resList.add(this.ipAdds.get(randomPick));
+			
+			if(!visited.contains(this.ipAdds.get(randomPick)))
+			{
+				resList.add(this.ipAdds.get(randomPick));
+				visited.add(this.ipAdds.get(randomPick));
+			}
 		}
 		
 		return resList;
