@@ -13,11 +13,18 @@ public class testMain {
 
 	public static void main(String[] args) throws Exception {
 		//print out localIP
-		String localIP = getIpLocalhost();
-		InetAddress ip = InetAddress.getByName(localIP);
-		ArrayList<InetAddress> destIP = new ArrayList<>();
-		destIP.add(ip);
-		System.out.println("local IP:" + localIP);
+//		String localIP = getIpLocalhost();
+//		InetAddress ip = InetAddress.getByName(localIP);
+//		ArrayList<InetAddress> destIP = new ArrayList<>();
+//		destIP.add(ip);
+//		System.out.println("local IP:" + localIP);
+		
+		HashMap<String, String> res = ServerManager.getAmiIpFromFile();
+		for(String key: res.keySet())
+		{
+			System.out.println("key: " + key + "value: " + res.get(key));
+		}
+		
 		
 		
 		/**SimpleDB 
@@ -31,9 +38,9 @@ public class testMain {
 //		SimpleDB.SimpleDBdelete("100.32.33.44");
 //		SimpleDB.SimpleDBdelete("101.22.33.44");
 //		SimpleDB.SimpleDBdelete("10.2.3.4");
-		ArrayList<InstanceValues> res = SimpleDB.SimpleDBdownload();
-		
-		System.out.println("sdb size: " + res.size());
+//		ArrayList<InstanceValues> res = SimpleDB.SimpleDBdownload();
+//		
+//		System.out.println("sdb size: " + res.size());
 //		
 //		for(InstanceValues iv: res)
 //		{
@@ -47,15 +54,15 @@ public class testMain {
 		 * test**/
 		
 		//rpc_client
-		RPC_Client rpc_client = new RPC_Client();
-		ArrayList<InetAddress> ipAdds = new ArrayList<InetAddress>();
-		//ipAdds.add(ip);
-		InetAddress ip2 = InetAddress.getByName("10.148.12.129");
-		ipAdds.add(ip2);
-		rpc_client.ipAdds = ipAdds;
-		SessionID sID = new SessionID("0", 1, 1);
-		Session newS = new Session(sID);
-		rpc_client.sessionReadClient(sID, 0, ipAdds);
+//		RPC_Client rpc_client = new RPC_Client();
+//		ArrayList<InetAddress> ipAdds = new ArrayList<InetAddress>();
+//		//ipAdds.add(ip);
+//		InetAddress ip2 = InetAddress.getByName("10.148.12.129");
+//		ipAdds.add(ip2);
+//		rpc_client.ipAdds = ipAdds;
+//		SessionID sID = new SessionID("0", 1, 1);
+//		Session newS = new Session(sID);
+//		rpc_client.sessionReadClient(sID, 0, ipAdds);
 //		
 //		//rpc initrandomdest test
 ////		ArrayList<InetAddress> ipAdds = new ArrayList<InetAddress>();
@@ -105,8 +112,8 @@ public class testMain {
 		 * unit 
 		 * test**/
 		//init discardTime
-		System.out.println(new Date());
-		System.out.println(ServerManager.initDiscardTime());
+//		System.out.println(new Date());
+//		System.out.println(ServerManager.initDiscardTime());
 		
 		
 		/**Garbage 

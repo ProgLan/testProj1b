@@ -19,7 +19,7 @@ import com.amazonaws.services.simpledb.model.SelectRequest;
 
 
 public class SimpleDB {
-	private static final String DomainName = "IPAddrDM";
+	private static final String DomainName = "IPaddrDM";
 
 	/**
 	 * Upload IP addresses to the SimpleDB domain "IPAddrDM". Will create a

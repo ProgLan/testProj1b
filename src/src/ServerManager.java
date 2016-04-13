@@ -1,7 +1,10 @@
 package src;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
@@ -52,7 +55,17 @@ public class ServerManager{
 	
 	public ServerManager(){
 		//if test on local, set local Ip address
-		this.localIPString = getIpLocalhost();
+//		this.localIPString = getIpLocalhost();
+//		try {
+//			this.localIp= InetAddress.getByName(this.localIPString);
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("server manager: local IP" + this.localIp);
+		
+		//if test on ec2
+		this.localIPString = getIPFromFile();
 		try {
 			this.localIp= InetAddress.getByName(this.localIPString);
 		} catch (UnknownHostException e) {
@@ -60,13 +73,10 @@ public class ServerManager{
 			e.printStackTrace();
 		}
 		System.out.println("server manager: local IP" + this.localIp);
-		
-		//if test on ec2
-		//this.localIPString = getIPFromFile();
 				
 		//sync amiIpTable from simpleDB
 		try {
-			this.amiIpTable = getAMIIPTableFromSDB();
+			this.amiIpTable = getAmiIpFromFile();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +84,7 @@ public class ServerManager{
 		System.out.println("server manager: localAmiIPtable size " + this.amiIpTable.size());
 		
 		//get this server's amiIndex from SimpleDB and store in the amiIndex variable
-		this.amiIndex = this.getLoclAmi();
+		this.amiIndex = getLoclAmiFromFile();
 		
 		//get reboot num from file system
 		try {
@@ -466,6 +476,64 @@ public class ServerManager{
 		return res;
 	}
 	
+	public static HashMap<String, String> getAmiIpFromFile(){
+		HashMap<String, String> res = new HashMap<String, String>();
+		
+		//String csvFile = "Home/exsitingValues.csv";
+		String csvFile = "/Users/proglan/Desktop/test.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+
+			        // use comma as separator
+				String[] row = line.split(cvsSplitBy);
+
+				res.put(row[1], row[0]);
+
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return res;
+	}
+	
+	public static int getRebootNumFromFile(){
+		File file = new File("Home/local-rebootNum");
+		int res = 0;
+		
+		try (FileInputStream fis = new FileInputStream(file)) {
+
+			//System.out.println("Total file size to read (in bytes) : "+ fis.available());
+
+			int content;
+			while ((content = fis.read()) != -1) {
+				res = res * 10 + ((char)content - '0');
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	
 	public static String getIPFromFile() {
 		File file = new File("Home/local-ipv4");
 		String res = "";
@@ -503,19 +571,26 @@ public class ServerManager{
 	}
 	
 	
-	public String getLoclAmi() {
-		String res = "no ami in table?";
+	public static String getLoclAmiFromFile() {
+		File file = new File("/Home/ami-launch-index");
+		int res = 0;
 		
-		for(String key: this.amiIpTable.keySet())
-		{
-			if(this.localIPString.equals(key))
-			{
-				res = this.amiIpTable.get(key);
+		try (FileInputStream fis = new FileInputStream(file)) {
+
+			//System.out.println("Total file size to read (in bytes) : "+ fis.available());
+
+			int content;
+			while ((content = fis.read()) != -1) {
+				res = res * 10 + ((char)content - '0');
 			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		return res;
+		return "" + res;
 	}
+	
 	
  	
 	public static HashMap<String, String> getAMIIPTableFromSDB() throws Exception{
