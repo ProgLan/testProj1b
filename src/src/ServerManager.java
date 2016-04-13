@@ -478,22 +478,23 @@ public class ServerManager{
 	
 	public static HashMap<String, String> getAmiIpFromFile(){
 		HashMap<String, String> res = new HashMap<String, String>();
+		ArrayList<String> list1 = new ArrayList<>();
+		ArrayList<String> list2 = new ArrayList<>();
 		
-		String csvFile = "Home/exsitingValues.csv";
-		//String csvFile = "/Users/proglan/Desktop/test.csv";
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
+		//String csvFile = "Home/exsitingValues.csv";
+		String file1 = "/Users/proglan/Desktop/test1";
+		String file2 = "/Users/proglan/Desktop/test2";
+		BufferedReader br1 = null;
+	
 
 		try {
 
-			br = new BufferedReader(new FileReader(csvFile));
-			while ((line = br.readLine()) != null) {
+			br1 = new BufferedReader(new FileReader(file1));
+			String line = "";
+			
+			while ((line = br1.readLine()) != null) {
 
-			        // use comma as separator
-				String[] row = line.split(cvsSplitBy);
-
-				res.put(row[1], row[0]);
+			  list1.add(line);
 
 			}
 
@@ -502,13 +503,46 @@ public class ServerManager{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
+			if (br1 != null) {
 				try {
-					br.close();
+					br1.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+		}
+		
+		BufferedReader br2 = null;
+		
+
+		try {
+
+			br2 = new BufferedReader(new FileReader(file2));
+			String line = "";
+			
+			while ((line = br2.readLine()) != null) {
+
+			  list2.add(line);
+
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br2 != null) {
+				try {
+					br2.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		for(int i = 0; i < list1.size(); i++)
+		{
+			res.put(list1.get(i), list2.get(i));
 		}
 		
 		return res;
