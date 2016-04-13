@@ -25,7 +25,7 @@ public class RPC_Client{
 	private int callIDGenerator = 0;
 	public static final int portProj1bRPC = 5300;
 	public static final int maxPacketSize = 1000;
-	
+	//public static final int timeOutLength = 10000;
 	//system ip address list
 	public ArrayList<InetAddress> ipAdds;
 	
@@ -72,6 +72,9 @@ public class RPC_Client{
 			
 			byte[] inBuf = new byte[maxPacketSize];
 			DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
+			//rpcSocket.setSoTimeout(timeOutLength);
+
+			
 			int returnCallId;
 			try{
 				do{
@@ -92,6 +95,7 @@ public class RPC_Client{
 						//construct a new srt and setInfo
 						srt = new RPC_SessionReadTuple();
 						srt.setInfo(flag, recvTuple.data, returnCallId, recvTuple.amiInd);
+						srt.data.foundServerAmiInd = recvTuple.amiInd;
 						
 						System.out.println("rpcclient: flagVal becomes true");
 					}
@@ -158,6 +162,7 @@ public class RPC_Client{
 			
 			byte[] inBuf = new byte[maxPacketSize];
 			DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
+			//rpcSocket.setSoTimeout(timeOutLength);
 			int returnCallId;
 			
 			try{
@@ -211,7 +216,7 @@ public class RPC_Client{
 				break;
 			}
 		}
-		
+		System.out.println("writeSucNum: " + writeSucNum);
 		
 		rpcSocket.close();
 		

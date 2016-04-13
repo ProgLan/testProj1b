@@ -266,7 +266,7 @@ public class ServerManager{
 								e.printStackTrace();
 							}
 							
-							resSession.foundServerAmiInd = foundServerAmi;
+							//resSession.foundServerAmiInd = foundServerAmi;
 							return resSession;
 						}
 					}
@@ -306,9 +306,10 @@ public class ServerManager{
 					{
 						resSession.rpcDataBricks.add(loc);
 					}
-					
 					resSession.foundServerAmiInd = foundServerAmi;
+					
 				}
+				
 			}
 			
 			return resSession;
@@ -374,7 +375,7 @@ public class ServerManager{
 		//manually set cookie expire
 		cookie.setMaxAge(SESSION_TIMEOUT_SECS / 1000);
 		//TODO: cookie set Domain， get root domain first
-		//cookie.setDomain("server0.lz376.bigdata.systems");
+		//cookie.setDomain("lz376.bigdata.systems");
 		response.addCookie(cookie);
 		
 		return cookie;
@@ -397,6 +398,7 @@ public class ServerManager{
 		res.append(session.sessionID.toString());
 		//TODO
 		res.append("_" + session.version[0]);
+		System.out.print("session rpcBrickNum: " + session.rpcDataBricks);
 		for(String loc: session.rpcDataBricks)
 		{
 			res.append("_" + loc);
@@ -409,10 +411,9 @@ public class ServerManager{
 		String res = "";
 		
 		String cookieVal = c.getValue();
+		System.out.println("cookie Val: " + cookieVal);
 		String[] cookieVals = cookieVal.split("_");
 		System.out.println("cookieVal's length:" + cookieVals.length);
-		
-		
 		
 		res += cookieVals[4];
 		res += " and ";
